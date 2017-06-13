@@ -2,3 +2,5 @@ var/*
 !var/README.md
 webroot/documents
 webroot/data
+.DS_Store
+._.DS_Store
