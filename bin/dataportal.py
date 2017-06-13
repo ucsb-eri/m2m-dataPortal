@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-#https://wiki.eri.ucsb.edu/stadm/Dataportal
+#https://wiki-stadm.eri.ucsb.edu/Dataportal
 
 # USER CONFIGURATION PARAMETERS:
 # dataroot: absolute path to root directory containing data dirs
@@ -28,8 +28,7 @@ import json
 import sqlite3
 from stat import *
 
-
-# TODO: wipe old db and create new db every time script is called?
+# TODO: wipe old db and create new db every time script is called? Y for now
 
 # make sqlite db if table does not exist
 # table names: imports, datafiles
@@ -40,9 +39,11 @@ datafiles_schema     += 'importId TEXT, FOREIGN KEY(importID) REFERENCES imports
 
 # Starting to think more along the lines of directory - file tables instead of import - file tables.
 # The import idea is potentially useful, but I think we want to start with a simpler model.
-
-d="CREATE TABLE IF NOT EXISTS dirs (did INTEGER PRIMARY KEY, dname TEXT, dpath TEXT, dctime INTEGER, dmtime INTEGER, depoch integer default (cast(strftime('%s','now') as int)))"
-f="CREATE TABLE IF NOT EXISTS files (fid INTEGER PRIMARY KEY, f_did INTEGER, fname TEXT, fpath TEXT, fctime INTEGER, fmtime INTEGER, fepoch integer default (cast(strftime('%s','now') as int)), bytes INTEGER)"
+# not sure if we will use the epoch entries at this stage... might be more useful to still have an import table
+# that logs in when the import is done.  But at this point
+i="CREATE TABLE IF NOT EXISTS import (iid INTEGER PRIMARY KEY, topdir TEXT UNIQUE ON CONFLICT REPLACE, epoch INTEGER DEFAULT (CAST(STRFTIME('%s','now') AS INTEGER)))"
+d="CREATE TABLE IF NOT EXISTS dirs (did INTEGER PRIMARY KEY, dname TEXT, dpath TEXT, dctime INTEGER, dmtime INTEGER)"
+f="CREATE TABLE IF NOT EXISTS files (fid INTEGER PRIMARY KEY, f_did INTEGER, fname TEXT, fpath TEXT, fctime INTEGER, fmtime INTEGER, bytes INTEGER)"
 # track directories using a dict, keep track of an id there
 # as a new directory shows up, assign new id, insert into db
 # as files in that dir are processed, use that dir id as a foreign key
@@ -56,8 +57,6 @@ f="CREATE TABLE IF NOT EXISTS files (fid INTEGER PRIMARY KEY, f_did INTEGER, fna
 # if table does not exist
 # open up sqlite db
 #
-
-
 
 
 class m2mPortalCrawl:
@@ -87,7 +86,7 @@ class m2mPortalCrawl:
             # derive relative current directory.
             # this should work OK, but we could verify root[0:ltd] == topdir
             rel = root[ltd:]
-            
+
             # map directory (relative to top) to a directory ID, not sure that actually needed
             #self.dirDict[rel] = self.dirID
 
