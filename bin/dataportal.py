@@ -44,9 +44,28 @@ datafiles_schema	+= 'importId TEXT, FOREIGN KEY(importID) REFERENCES imports(id)
 
 
 # open up sqlite db
+#
 
+# Here is an example of os.walk
+#    def crawl(self,topdir):
+#        for root, dirs, files in os.walk(topdir):
+#            dlist = [(os.path.join(root,d)) for d in dirs]
+#            self.dirlist.extend(dlist)  # build a directory list for the next pass
+#
+#            #flist = [(os.path.join(root,f)) for f in files]
+#            for ff in files:
+#                fn = self.clean(ff)  # currently incorrect usage as we are passing in the whole path
+#                if fn != ff:
+#                    self.changedF+=1
+#                    if os.path.isfile(os.path.join(root,fn)):
+#                        print "# dest dir already exists - inspect conflict summary below ("+os.path.join(root,fn)+")"
+#                        self.filInConflict+="pushd '"+root+"' ;  mv -i '"+ff+"'  '"+fn+"'-$conflictString; popd\n"
+#                    else:
+#                        print "renaming file in dir: '"+root+"   '"+ff+"'  TO '"+fn+"'"
+#                        os.rename(os.path.join(root,ff),os.path.join(root,fn))
+#
 
-
+#
 # # get the data files
 # # os recursive walk maybe? if not then we can try glob
 # pattern = "bio_*.aux"
