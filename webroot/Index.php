@@ -2,6 +2,7 @@
 <html>
 <head>
 <title>M2M data project website</title>
+<link rel="stylesheet" href="css/m2m-dataportal.css?v=1.0">
 </head>
 <body>
 <h1>M2M data project website</h1>
@@ -24,6 +25,22 @@ class m2mDataPortal {
         print_r($o);
         print "</pre>";
     }
+    function generateBreadCrumb($dirID){
+        $parID = $dirID;
+        $b = '';
+        $a = array();
+        // recursively get the parent till parent == '' or 0
+        while( ! ($parID == '' || $parID == '0' )){
+            $parName = $this->dbh->fetchValNew("SELECT dname FROM dirs WHERE did = ?;",array($parID));
+            //$label = ($parName == '') ? "TopLevel" : "$parName";
+            $a[] = "<a href=\"?dirID=$parID\">$parName</a>";
+            $parID = $this->dbh->fetchValNew("SELECT dparent FROM dirs WHERE did = ?;",array($parID));
+        }
+        $a[] = "<a href=\"?dirID=0\">TopLevel</a>";
+        $b .= implode("&nbsp;&gt;&nbsp;",array_reverse($a));
+        $b .= "<br>\n";
+        return $b;
+    }
     function display($dirID){
         $b = '';
         //$b .= "Hey There ... Again - Displaying: $dirID<br>\n";
@@ -33,13 +50,17 @@ class m2mDataPortal {
 
         // want to provide a link to the parent dirID
         $up = $this->dbh->fetchValNew("SELECT dparent FROM dirs WHERE did = ?;",array($dirID));
+        $b .= "<a href=\".\">Top directory</a><br>\n";
         $b .= "<a href=\"?dirID=$up\">Up a directory</a><br>\n";
+        $b .= $this->generateBreadCrumb($dirID);
 
         // list directories
         $h = $this->dbh->getKeyedHash('dname',"SELECT * FROM dirs WHERE dparent = ?;",array($dirID));
         //$this->print_pre($h,"Hash");
         foreach($h as $k => $v){
-            $b .= "dir: $k, v={$v['did']} - <a href=\"?dirID={$v['did']}\">$k</a><br>\n";
+            $url = "?dirID={$v['did']}";
+            $label = "";
+            $b .= "dir: <a href=\"$url\">$k</a><br>\n";
         }
 
         // list files
@@ -47,8 +68,9 @@ class m2mDataPortal {
         $h = $this->dbh->getKeyedHash('fname',"SELECT * FROM files LEFT JOIN dirs on f_did = did WHERE f_did = ?;",array($dirID));
         //$this->print_pre($h,"Hash");
         foreach($h as $k => $v){
-            $url = ()
-            $b .= "file: $k, v={$v['fid']} - <a href=\"?dirID={$v['fid']}\">$k - {$v['fname']}</a> -- <a href=\"data/{$v['fpath']}\">{$v['fpath']}</a><br>\n";
+            $url = "data/{$v['fpath']}";
+            $label = "{$v['fname']}";
+            $b .= "file: <a href=\"$url\">$label</a><br>\n";
         }
         return $b;
     }

@@ -7,7 +7,6 @@
 dataroot = "../webroot/data/"
 dbfile = "../var/m2m-dataportal.sqlite3"
 
-
 # do not touch anything below this line
 # ===================================================================================
 
