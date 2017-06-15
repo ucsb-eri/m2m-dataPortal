@@ -1,7 +1,7 @@
 <?php
 // this requires the AJM phplib install
-require_once('inc/dbhManagementCore.php');
-require_once('inc/Parsedown.php');
+require_once('ext/dbhManagementCore.php');
+require_once('ext/Parsedown.php');
 
 ////////////////////////////////////////////////////////////////////////////////
 class m2mDataPortalDb extends dbMgmtCore {
