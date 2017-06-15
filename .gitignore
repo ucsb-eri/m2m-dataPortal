@@ -4,5 +4,6 @@ webroot/documents
 webroot/data
 webroot/css
 webroot/.sass-cache
+webroot/.nfs*
 .DS_Store
 ._.DS_Store
