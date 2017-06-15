@@ -54,6 +54,29 @@ class m2mDataPortal {
         $b .= "<a href=\"?dirID=$up\">Up a directory</a><br>\n";
         $b .= $this->generateBreadCrumb($dirID);
 
+        $b .= $this->listDir($dirID);
+        // // list directories
+        // $h = $this->dbh->getKeyedHash('dname',"SELECT * FROM dirs WHERE dparent = ?;",array($dirID));
+        // //$this->print_pre($h,"Hash");
+        // foreach($h as $k => $v){
+        //     $url = "?dirID={$v['did']}";
+        //     $label = "";
+        //     $b .= "dir: <a href=\"$url\">$k</a><br>\n";
+        // }
+
+        $b .= $this->listFiles($dirID);
+        // // list files
+        // // pull out README.md and display at top
+        // $h = $this->dbh->getKeyedHash('fname',"SELECT * FROM files LEFT JOIN dirs on f_did = did WHERE f_did = ?;",array($dirID));
+        // //$this->print_pre($h,"Hash");
+        // foreach($h as $k => $v){
+        //     $url = "data/{$v['fpath']}";
+        //     $label = "{$v['fname']}";
+        //     $b .= "file: <a href=\"$url\">$label</a><br>\n";
+        // }
+        // return $b;
+    }
+    function listDir($dirID){
         // list directories
         $h = $this->dbh->getKeyedHash('dname',"SELECT * FROM dirs WHERE dparent = ?;",array($dirID));
         //$this->print_pre($h,"Hash");
@@ -62,7 +85,9 @@ class m2mDataPortal {
             $label = "";
             $b .= "dir: <a href=\"$url\">$k</a><br>\n";
         }
-
+        return $b;
+    }
+    function listFiles($dirID){
         // list files
         // pull out README.md and display at top
         $h = $this->dbh->getKeyedHash('fname',"SELECT * FROM files LEFT JOIN dirs on f_did = did WHERE f_did = ?;",array($dirID));
@@ -74,6 +99,7 @@ class m2mDataPortal {
         }
         return $b;
     }
+
 }
 
 $dirID = ( isset($_GET['dirID'])) ? intval(stripslashes($_GET['dirID'])) : 0;
