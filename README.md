@@ -4,6 +4,7 @@ Some of the value added features are:
 * db (sqlite3) driven to avoid repeated crawling of the data directories
 * support for a single markdown readme file (README.md) in each folder/directory
 * breadcrumb indicator at top of page
+* SASS support (compass)
 
 ## Associated Resources
 wiki page located at [http://wiki-stadm.eri.ucsb.edu/Dataportal](http://wiki-stadm.eri.ucsb.edu/Dataportal)
